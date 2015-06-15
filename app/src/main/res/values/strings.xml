@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Location Banana</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Button -->
+    <string name="position">Lat=%1$.4f, Lon=%2$.4f</string>
+</resources>
