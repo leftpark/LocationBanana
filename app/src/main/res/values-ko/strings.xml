@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">여기는 바나나</string>
+
+    <string name="hello_world">안녕, 세상!</string>
+    <string name="action_settings">설정</string>
+
+    <!-- Button -->
+    <string name="coordinate">위도=%1$.4f, 경도=%2$.4f</string>
+
+    <!-- Current Location -->
+    <string name="current_location">현재 위치</string>
+</resources>

@@ -2,12 +2,7 @@ package com.leftpark.android.locationbanana;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.leftpark.android.locationbanana.util.LocationHelper;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -26,8 +22,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private static Context mContext;
 
-    // LocationManager
-    private static LocationManager mLocationManager;
+    // LocationHelper
+    private static LocationHelper mLocationHelper;
 
     // Google Map
     private GoogleMap googleMap;
@@ -52,7 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         try {
             // Loading map
-            initilizeMap();
+            initializeMap();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,15 +60,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // Initialize Views
         initializeView();
 
-        // Intialize Gps
-        initGps();
+        // Initialize LocationProvider
+        initLocation();
 
     }
 
     /**
      * function to load map. If map is not created it will create it for you
      * */
-    private void initilizeMap() {
+    private void initializeMap() {
         if (googleMap == null) {
             googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                     R.id.map)).getMap();
@@ -84,13 +80,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         .show();
             }
 
-            googleMap.setMyLocationEnabled(true);
+            // Set Enable of My Location
+            //googleMap.setMyLocationEnabled(true);
+
+            // Set Enable of Zoom
             googleMap.getUiSettings().setZoomGesturesEnabled(true);
         }
     }
 
     private void initializeValue() {
-        strPosition = getString(R.string.position, 0.0, 0.0);
+        strPosition = getString(R.string.coordinate, 0.0, 0.0);
     }
 
     private void initializeView() {
@@ -99,16 +98,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mBtnPosition.setOnClickListener(this);
     }
 
-    private void initGps() {
-        LocationManager lm = getLocationManager();
+    //+Initialize LocationProvider
+    private void initLocation() {
 
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mLocationListener);
+        // Create LocationHelper
+        mLocationHelper = new LocationHelper(mContext);
+
+        if (mLocationHelper != null) {
+            // Initialize LocationProvider
+            mLocationHelper.init();
+        }
     }
+    //-Initialize LocationProvider
 
     @Override
     protected void onResume() {
         super.onResume();
-        initilizeMap();
+        initializeMap();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mLocationHelper != null) {
+            mLocationHelper.release();
+            mLocationHelper = null;
+        }
+
+        if (mContext != null) {
+            mContext = null;
+        }
     }
 
     @Override
@@ -116,65 +136,55 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch(v.getId()) {
             case R.id.btn_position:
                 LatLng ll = new LatLng(dLatitude, dLongitude);
-                showCurrentPosition(ll);
+                showCurrentLocation(ll);
                 break;
         }
     }
 
-    // Get Current Postion
-    private void getCurrentPosition() {
-        LocationManager lm = getLocationManager();
+    //+Update Location String
+    public void updateLocationString() {
+        strPosition = getString(R.string.coordinate, dLatitude, dLongitude);
     }
+    //-Update Location String
 
-    private LocationManager getLocationManager() {
-        if (mLocationManager == null) {
-            LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            mLocationManager = lm;
-        }
-
-        return mLocationManager;
+    //+Set Latitude
+    public void setLatitude(double latitude) {
+        dLatitude = latitude;
     }
+    //-Set Latitude
 
-    //+LoncationListener
-    private LocationListener mLocationListener = new LocationListener() {
+    //+Get Latitude
+    public double getLatitude() {
+        double lat = 0.0;
+        lat = dLatitude;
 
-        @Override
-        public void onLocationChanged(Location location) {
-            Location l = location;
+        return lat;
+    }
+    //-Get Latitude
 
-            // Get latitude
-            dLatitude = l.getLatitude();
+    //+Set Longitude
+    public void setLongitude(double longitude) {
+        dLongitude = longitude;
+    }
+    //-Set Longitude
 
-            // Get longitude
-            dLongitude = l.getLongitude();
+    //+Get Longitude
+    public double getLongitude() {
+        double lon = 0.0;
+        lon = dLongitude;
 
-            strPosition = getString(R.string.position, dLatitude, dLongitude);
+        return lon;
+    }
+    //-Get Longitude
 
-            updateView();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };
-    //-LocationListener
-
-    private void updateView() {
+    //+Update Views
+    public void updateView() {
         mBtnPosition.setText(strPosition);
     }
+    //+Update Views
 
-    private void showCurrentPosition(LatLng sll) {
+    //+Show Current Location
+    private void showCurrentLocation(LatLng sll) {
 
         LatLng ll = sll;
 
@@ -183,11 +193,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // Marker
         googleMap.addMarker(new MarkerOptions()
-                .title("Current Postion")
-                .snippet(getString(R.string.position, dLatitude, dLongitude))
+                .title(getString(R.string.current_location))
+                .snippet(mLocationHelper.getAddress(ll.latitude, ll.longitude).toString())
                 .position(ll));
 
         // Zoom in, animating the camera.
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
     }
+    //-Show Current Location
 }

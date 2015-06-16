@@ -5,5 +5,8 @@
     <string name="action_settings">Settings</string>
 
     <!-- Button -->
-    <string name="position">Lat=%1$.4f, Lon=%2$.4f</string>
+    <string name="coordinate">Lat=%1$.4f, Lon=%2$.4f</string>
+
+    <!-- Current Location -->
+    <string name="current_location">Current location</string>
 </resources>
