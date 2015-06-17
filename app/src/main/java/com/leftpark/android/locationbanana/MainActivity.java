@@ -5,12 +5,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.leftpark.android.locationbanana.util.LocationHelper;
 
@@ -28,14 +30,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // Google Map
     private GoogleMap googleMap;
 
+    // Marker
+    private static Marker mMarker;
+
     // LatLng
     private static LatLng curLatLng;
 
     // Views
+    private TextView mTvCoordiateLat;   // TextView for Latitude
+    private TextView mTvCoordiateLon;   // TextView for Longitude
+    private Button mBtnShare;
     private Button mBtnPosition;
 
     // Values
-    private String strPosition;
+    private String strCoordinateLat;
+    private String strCoordinateLon;
     double dLatitude;
     double dLongitude;
 
@@ -54,14 +63,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             e.printStackTrace();
         }
 
+        // Initialize LocationProvider
+        initLocation();
+
         // Initialize Values
         initializeValue();
 
         // Initialize Views
         initializeView();
-
-        // Initialize LocationProvider
-        initLocation();
 
     }
 
@@ -89,12 +98,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void initializeValue() {
-        strPosition = getString(R.string.coordinate, 0.0, 0.0);
+
+        if (mLocationHelper == null) {
+            dLatitude = 0;
+            dLongitude = 0;
+        } else if (mLocationHelper.hasLastLocation()) {
+            dLatitude = mLocationHelper.getLastLatitude();
+            dLongitude = mLocationHelper.getLastLongitude();
+        } else {
+            dLatitude = mLocationHelper.LATITUDE_SUSINLEE;
+            dLongitude = mLocationHelper.LONGITUDE_SUSINLEE;
+        }
+
+        strCoordinateLat = getString(R.string.coordinate_latitude, dLatitude);
+        strCoordinateLon = getString(R.string.coordinate_longitude, dLongitude);
     }
 
     private void initializeView() {
+
+        // Coordinate TextView
+        mTvCoordiateLat = (TextView)findViewById(R.id.tv_coordinate_latitude);
+
+        mTvCoordiateLon = (TextView)findViewById(R.id.tv_coordinate_longitude);
+
+        // Set Shar Button
+        mBtnShare = (Button)findViewById(R.id.btn_share);
+        mBtnShare.setOnClickListener(this);
+
+        // Set Position Button
         mBtnPosition = (Button)findViewById(R.id.btn_position);
-        mBtnPosition.setText(strPosition);
         mBtnPosition.setOnClickListener(this);
     }
 
@@ -115,6 +147,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onResume() {
         super.onResume();
         initializeMap();
+
+        // Test
+        updateCoordinateString();
+        updateView();
+        showCurrentLocation();
+        // Test
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -129,27 +172,39 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (mContext != null) {
             mContext = null;
         }
+
+        if (mMarker != null) {
+            mMarker = null;
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
+            case R.id.btn_share:
+                Toast.makeText(mContext, getResources().getString(R.string.share), Toast.LENGTH_SHORT).show();
+                break;
             case R.id.btn_position:
-                LatLng ll = new LatLng(dLatitude, dLongitude);
-                showCurrentLocation(ll);
+                showCurrentLocation();
                 break;
         }
+        return;
     }
 
     //+Update Location String
-    public void updateLocationString() {
-        strPosition = getString(R.string.coordinate, dLatitude, dLongitude);
+    public void updateCoordinateString() {
+        strCoordinateLat = getString(R.string.coordinate_latitude, dLatitude);
+        strCoordinateLon = getString(R.string.coordinate_longitude, dLongitude);
     }
     //-Update Location String
 
     //+Set Latitude
-    public void setLatitude(double latitude) {
+    public boolean setLatitude(double latitude) {
+        if (dLatitude == latitude) {
+            return false;
+        }
         dLatitude = latitude;
+        return true;
     }
     //-Set Latitude
 
@@ -163,8 +218,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //-Get Latitude
 
     //+Set Longitude
-    public void setLongitude(double longitude) {
+    public boolean setLongitude(double longitude) {
+        if (dLongitude == longitude ) {
+            return false;
+        }
         dLongitude = longitude;
+        return true;
     }
     //-Set Longitude
 
@@ -179,20 +238,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //+Update Views
     public void updateView() {
-        mBtnPosition.setText(strPosition);
+        mTvCoordiateLat.setText(strCoordinateLat);
+        mTvCoordiateLon.setText(strCoordinateLon);
     }
     //+Update Views
 
     //+Show Current Location
-    private void showCurrentLocation(LatLng sll) {
+    private void showCurrentLocation() {
 
-        LatLng ll = sll;
+        if (mMarker != null) {
+            mMarker.remove();
+        }
+
+        LatLng ll = new LatLng(dLatitude, dLongitude);
 
         // Move the camera instantly to current postion with a zoom of 15.
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ll, 15));
 
         // Marker
-        googleMap.addMarker(new MarkerOptions()
+        mMarker = googleMap.addMarker(new MarkerOptions()
                 .title(getString(R.string.current_location))
                 .snippet(mLocationHelper.getAddress(ll.latitude, ll.longitude).toString())
                 .position(ll));

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Background Color -->
+
+    <!-- Banana Yellow : FFC916 -->
+    <color name="background_banana_yellow">#FFFFC916</color>
+    <!-- Banana Yellow Dark : CC8405 -->
+    <color name="background_banana_yellow_dark">#FFCC8405</color>
+
+    <!-- Banana Green : CDC90C-->
+    <color name="background_banana_green">#FFCDC90C</color>
+    <!-- Banana Green Dark : 4E6501 -->
+    <color name="background_banana_green_dark">#FF4E6501</color>
+
+    <!-- Background Color -->
+
+
+    <!-- Text Color -->
+    <!-- Banana Black : -->
+    <color name="background_banana_black">#FF000000</color>
+
+    <!-- Text Color -->
+
+</resources>

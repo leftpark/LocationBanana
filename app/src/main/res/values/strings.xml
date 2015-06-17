@@ -4,8 +4,14 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <!-- Button -->
-    <string name="coordinate">Lat=%1$.4f, Lon=%2$.4f</string>
+    <string name="update_map">Update Map</string>
+    <string name="share">Sharing</string>
+
+    <!-- Coordinate -->
+    <string name="coordinate_latitude_init">Lat : -.----</string>
+    <string name="coordinate_longitude_init">Lon : -.----</string>
+    <string name="coordinate_latitude">Lat : %1$.6f</string>
+    <string name="coordinate_longitude">Lon : %1$.6f</string>
 
     <!-- Current Location -->
     <string name="current_location">Current location</string>

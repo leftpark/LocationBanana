@@ -4,8 +4,14 @@
     <string name="hello_world">안녕, 세상!</string>
     <string name="action_settings">설정</string>
 
-    <!-- Button -->
-    <string name="coordinate">위도=%1$.4f, 경도=%2$.4f</string>
+    <string name="update_map">지도에 표시</string>
+    <string name="share">공유하기</string>
+
+    <!-- Coordinate -->
+    <string name="coordinate_latitude_init">위도 : -.----</string>
+    <string name="coordinate_longitude_init">경도 : -.----</string>
+    <string name="coordinate_latitude">위도 : %1$.6f</string>
+    <string name="coordinate_longitude">경도 : %1$.6f</string>
 
     <!-- Current Location -->
     <string name="current_location">현재 위치</string>

@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.leftpark.android.locationbanana.MainActivity;
 
@@ -21,6 +22,13 @@ import java.util.Locale;
  */
 public class LocationHelper {
 
+    // TAG
+    private static final String TAG = "LocationHelper";
+
+    // Default Latitude and Longitude of SUSINLEE in SEOUL
+    public static final double LATITUDE_SUSINLEE = 37.571006;
+    public static final double LONGITUDE_SUSINLEE = 126.976940;
+
     // MainActivity
     private static MainActivity mMain;
 
@@ -29,6 +37,9 @@ public class LocationHelper {
 
     // LocationManager
     private static LocationManager mLocationManager;
+
+    // High accuracy provider
+    private static LocationProvider mLocationProvider;
 
     // Construction with nothing
     public LocationHelper() {
@@ -54,8 +65,8 @@ public class LocationHelper {
         LocationManager lm = getLocationManager();
 
         // Get high accuracy provider
-        LocationProvider high = lm.getProvider(lm.getBestProvider(createFineCritera(),true));
-        lm.requestLocationUpdates(high.getName(), 1000, 0, mHighListener);
+        mLocationProvider = lm.getProvider(lm.getBestProvider(createFineCritera(),true));
+        lm.requestLocationUpdates(mLocationProvider.getName(), 1000, 0, mHighListener);
 
         // Get low accuracy provider
         LocationProvider low = lm.getProvider(lm.getBestProvider(createCoarseCritera(), true));
@@ -99,18 +110,23 @@ public class LocationHelper {
 
         @Override
         public void onLocationChanged(Location location) {
+            Log.d(TAG,"onLocationChanged(h) S");
             Location l = location;
 
             // Latitude
             double latitude = l.getLatitude();
-            mMain.setLatitude(latitude);
+            boolean reLat = mMain.setLatitude(latitude);
 
             // Longitude
             double longitude = l.getLongitude();
-            mMain.setLongitude(longitude);
+            boolean reLon = mMain.setLongitude(longitude);
+
+            if (reLat && reLon) {
+                return;
+            }
 
             // Update Location String
-            mMain.updateLocationString();
+            mMain.updateCoordinateString();
 
             // Update View
             mMain.updateView();
@@ -138,7 +154,26 @@ public class LocationHelper {
 
         @Override
         public void onLocationChanged(Location location) {
+            Log.d(TAG, "onLocationChanged(l) S");
+            Location l = location;
 
+            // Latitude
+            double latitude = l.getLatitude();
+            boolean reLat = mMain.setLatitude(latitude);
+
+            // Longitude
+            double longitude = l.getLongitude();
+            boolean reLon = mMain.setLongitude(longitude);
+
+            if (reLat && reLon) {
+                return;
+            }
+
+            // Update Location String
+            mMain.updateCoordinateString();
+
+            // Update View
+            mMain.updateView();
         }
 
         @Override
@@ -182,10 +217,26 @@ public class LocationHelper {
         return address;
     }
 
+    public boolean hasLastLocation() {
+        if (mLocationManager.getLastKnownLocation(mLocationProvider.getName())==null) {
+            return false;
+        }
+        return true;
+    }
+
+    public double getLastLatitude() {
+        Location l = mLocationManager.getLastKnownLocation(mLocationProvider.getName());
+        return l.getLatitude();
+    }
+
+    public double getLastLongitude() {
+        Location l = mLocationManager.getLastKnownLocation(mLocationProvider.getName());
+        return l.getLongitude();
+    }
+
     // Get current locale
     private Locale getCurrentLocale() {
         Locale locale = mContext.getResources().getConfiguration().locale;
-
         return locale;
     }
 
