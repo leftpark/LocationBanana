@@ -3,13 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/background_banana_yellow">
+    android:background="@color/banana_yellow">
 
     <!-- Coordinate -->
     <LinearLayout
         android:layout_width="@dimen/coordinate_layout_width"
         android:layout_height="@dimen/coordinate_layout_height"
         android:layout_margin="@dimen/coordinate_layout_margin"
+        android:background="@color/banana_white"
         android:orientation="horizontal">
 
         <TextView
@@ -17,7 +18,7 @@
             android:layout_width="@dimen/coordinate_tv_width"
             android:layout_height="@dimen/coordinate_tv_height"
             android:gravity="center_vertical"
-            android:textColor="@color/background_banana_black"
+            android:textColor="@color/banana_black"
             android:text="@string/coordinate_latitude_init"/>
 
         <TextView
@@ -25,7 +26,7 @@
             android:layout_width="@dimen/coordinate_tv_width"
             android:layout_height="@dimen/coordinate_tv_height"
             android:gravity="center_vertical"
-            android:textColor="@color/background_banana_black"
+            android:textColor="@color/banana_black"
             android:text="@string/coordinate_longitude_init"/>
 
     </LinearLayout>
@@ -58,19 +59,19 @@
             android:layout_width="@dimen/control_btn_width"
             android:layout_height="@dimen/control_btn_height"
             android:text="@string/share"
-            android:background="@color/background_banana_green_dark"/>
+            android:background="@drawable/banana_green_selector"/>
 
         <LinearLayout
             android:layout_width="@dimen/control_gab_width"
             android:layout_height="@dimen/control_gab_height"
-            android:background="@color/background_banana_yellow"/>
+            android:background="@color/banana_yellow"/>
 
         <Button
             android:id="@+id/btn_position"
             android:layout_width="@dimen/control_btn_width"
             android:layout_height="@dimen/control_btn_height"
             android:text="@string/update_map"
-            android:background="@drawable/btn_background"/>
+            android:background="@drawable/banana_green_selector"/>
 
     </LinearLayout>
 
