@@ -6,6 +6,7 @@
 
     <string name="update_map">Update Map</string>
     <string name="share">Sharing</string>
+    <string name="share_via">Share via</string>
 
     <!-- Coordinate -->
     <string name="coordinate_latitude_init">Lat : -.----</string>

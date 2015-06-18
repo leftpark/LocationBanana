@@ -6,6 +6,7 @@
 
     <string name="update_map">지도에 표시</string>
     <string name="share">공유하기</string>
+    <string name="share_via">다음으로 공유하기</string>
 
     <!-- Coordinate -->
     <string name="coordinate_latitude_init">위도 : -.----</string>

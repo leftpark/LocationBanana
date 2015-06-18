@@ -41,6 +41,10 @@ public class LocationHelper {
     // High accuracy provider
     private static LocationProvider mLocationProvider;
 
+    // Values
+    private double dLatitude = LATITUDE_SUSINLEE;
+    private double dLongitude = LONGITUDE_SUSINLEE;
+
     // Construction with nothing
     public LocationHelper() {
         // Do something
@@ -238,6 +242,20 @@ public class LocationHelper {
     private Locale getCurrentLocale() {
         Locale locale = mContext.getResources().getConfiguration().locale;
         return locale;
+    }
+
+    // Get Latitude
+    public double getLatitude() {
+        double lat = 0;
+        lat = dLatitude;
+        return lat;
+    }
+
+    // Get Longitude
+    public double getLongitude() {
+        double lon = 0;
+        lon = dLongitude;
+        return lon;
     }
 
     // This Criteria is high accuracy, high power, and cost.

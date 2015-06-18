@@ -2,6 +2,8 @@ package com.leftpark.android.locationbanana;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.leftpark.android.locationbanana.util.LocationHelper;
+import com.leftpark.android.locationbanana.util.ShareHelper;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -26,6 +29,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // LocationHelper
     private static LocationHelper mLocationHelper;
+
+    // ShareHelper
+    private static ShareHelper mShareHelper;
 
     // Google Map
     private GoogleMap googleMap;
@@ -66,6 +72,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // Initialize LocationProvider
         initLocation();
 
+        // Initialize ShareHelper
+        initShare();
+
         // Initialize Values
         initializeValue();
 
@@ -91,6 +100,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             // Set Enable of My Location
             //googleMap.setMyLocationEnabled(true);
+            //googleMap.setOnMyLocationChangeListener(mMLCListener);
 
             // Set Enable of Zoom
             googleMap.getUiSettings().setZoomGesturesEnabled(true);
@@ -143,6 +153,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
     //-Initialize LocationProvider
 
+    //+Initialize ShareHelper
+    private void initShare() {
+        // Create ShareHelper
+        mShareHelper = new ShareHelper(mContext);
+    }
+    //-Initialize ShareHelper
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -169,6 +186,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             mLocationHelper = null;
         }
 
+        if (mShareHelper != null) {
+            mShareHelper = null;
+        }
+
         if (mContext != null) {
             mContext = null;
         }
@@ -178,11 +199,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    // GoogleMap.OnMyLocationChangeListener
+    private GoogleMap.OnMyLocationChangeListener mMLCListener = new GoogleMap.OnMyLocationChangeListener() {
+        @Override
+        public void onMyLocationChange(Location location) {
+
+        }
+    };
+
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_share:
-                Toast.makeText(mContext, getResources().getString(R.string.share), Toast.LENGTH_SHORT).show();
+                Intent intent = mShareHelper.getShareIntent();
+                startActivity(Intent.createChooser(intent, getResources().getString(R.string.share_via)));
+                //Toast.makeText(mContext, getResources().getString(R.string.share), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_position:
                 showCurrentLocation();
@@ -265,4 +296,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
     }
     //-Show Current Location
+
+    // Get Marker
+    public Marker getMarker() {
+        Marker marker;
+        marker = mMarker;
+        return marker;
+    }
 }
