@@ -45,6 +45,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // Views
     private TextView mTvCoordiateLat;   // TextView for Latitude
     private TextView mTvCoordiateLon;   // TextView for Longitude
+    private TextView mTvCoordiateLatDMS;   // TextView for Latitude (DMS)
+    private TextView mTvCoordiateLonDMS;   // TextView for Longitude (DMS)
     private Button mBtnShare;
     private Button mBtnPosition;
 
@@ -128,8 +130,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // Coordinate TextView
         mTvCoordiateLat = (TextView)findViewById(R.id.tv_coordinate_latitude);
-
         mTvCoordiateLon = (TextView)findViewById(R.id.tv_coordinate_longitude);
+
+        mTvCoordiateLatDMS = (TextView)findViewById(R.id.tv_coordinate_latitude_dms);
+        mTvCoordiateLonDMS = (TextView)findViewById(R.id.tv_coordinate_longitude_dms);
 
         // Set Shar Button
         mBtnShare = (Button)findViewById(R.id.btn_share);
@@ -271,6 +275,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void updateView() {
         mTvCoordiateLat.setText(strCoordinateLat);
         mTvCoordiateLon.setText(strCoordinateLon);
+
+        mTvCoordiateLatDMS.setText(getString(R.string.coordinate_latitude_dms, mLocationHelper.getLatitudeDMS()));
+        mTvCoordiateLonDMS.setText(getString(R.string.coordinate_longitude_dms, mLocationHelper.getLongitudeDMS()));
     }
     //+Update Views
 

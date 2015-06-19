@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.leftpark.android.locationbanana.MainActivity;
 
@@ -42,8 +43,8 @@ public class LocationHelper {
     private static LocationProvider mLocationProvider;
 
     // Values
-    private double dLatitude = LATITUDE_SUSINLEE;
-    private double dLongitude = LONGITUDE_SUSINLEE;
+    private static double dLatitude = LATITUDE_SUSINLEE;
+    private static double dLongitude = LONGITUDE_SUSINLEE;
 
     // Construction with nothing
     public LocationHelper() {
@@ -119,10 +120,12 @@ public class LocationHelper {
 
             // Latitude
             double latitude = l.getLatitude();
+            dLatitude = latitude;
             boolean reLat = mMain.setLatitude(latitude);
 
             // Longitude
             double longitude = l.getLongitude();
+            dLongitude = longitude;
             boolean reLon = mMain.setLongitude(longitude);
 
             if (reLat && reLon) {
@@ -256,6 +259,49 @@ public class LocationHelper {
         double lon = 0;
         lon = dLongitude;
         return lon;
+    }
+
+
+    public String getLatitudeDMS() {
+        String ddLat = "";
+
+        if (hasLastLocation()) {
+            ddLat = dd2dms(getLastLatitude()) + "%22N";
+        } else {
+            ddLat = dd2dms(LATITUDE_SUSINLEE) + "%22N";
+        }
+
+        return ddLat;
+    }
+
+    public String getLongitudeDMS() {
+        String ddLon = "";
+
+        if (hasLastLocation()) {
+            ddLon = dd2dms(getLastLongitude()) + "%22E";
+        } else {
+            ddLon = dd2dms(LONGITUDE_SUSINLEE) + "%22E";
+        }
+
+        return ddLon;
+    }
+
+    public String dd2dms(double decimal_degrees) {
+        double dd = decimal_degrees;
+
+        int d = new Integer((int)dd);
+
+        int m = new Integer ((int)((dd - d) * 60));
+
+        double s = (dd - (double)d - ((double)m/60))*3600;
+
+        String msg = "[D:"+d+"][M:"+m+"][S:"+s+"]";
+
+        String strDMS = "";
+        //strDMS = String.format("%d", d) + "¡Æ" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+        strDMS = String.format("%d", d) + "%C2%B0" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+
+        return strDMS;
     }
 
     // This Criteria is high accuracy, high power, and cost.
