@@ -71,14 +71,6 @@ public class LocationHelper implements Parcelable{
     public static void init() {
         LocationManager lm = getLocationManager();
 
-        if (hasLastLocation()) {
-            setLatitude(getLastLatitude());
-            setLongitude(getLastLongitude());
-        } else {
-            setLatitude(LATITUDE_SUSINLEE);
-            setLongitude(LONGITUDE_SUSINLEE);
-        }
-
         // Get high accuracy provider
         mLocationProvider = lm.getProvider(lm.getBestProvider(createFineCritera(),true));
         lm.requestLocationUpdates(mLocationProvider.getName(), 1000, 0, mHighListener);
@@ -86,6 +78,14 @@ public class LocationHelper implements Parcelable{
         // Get low accuracy provider
         LocationProvider low = lm.getProvider(lm.getBestProvider(createCoarseCritera(), true));
         //lm.requestLocationUpdates(low.getName(), 1000, 0, mLowListener);
+
+        if (hasLastLocation()) {
+            setLatitude(getLastLatitude());
+            setLongitude(getLastLongitude());
+        } else {
+            setLatitude(LATITUDE_SUSINLEE);
+            setLongitude(LONGITUDE_SUSINLEE);
+        }
     }
 
     public static void release() {
@@ -220,7 +220,8 @@ public class LocationHelper implements Parcelable{
 
     // Check LastLocation
     public static boolean hasLastLocation() {
-        if (mLocationManager.getLastKnownLocation(mLocationProvider.getName())==null) {
+
+        if (mLocationManager == null || mLocationManager.getLastKnownLocation(mLocationProvider.getName()) == null) {
             return false;
         }
         return true;
