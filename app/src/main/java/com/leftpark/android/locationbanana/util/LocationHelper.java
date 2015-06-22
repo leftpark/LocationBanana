@@ -9,6 +9,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,7 +23,7 @@ import java.util.Locale;
 /**
  * Created by leftpark on 2015-06-16.
  */
-public class LocationHelper {
+public class LocationHelper implements Parcelable{
 
     // TAG
     private static final String TAG = "LocationHelper";
@@ -68,6 +70,14 @@ public class LocationHelper {
     // Init LocationProvider
     public static void init() {
         LocationManager lm = getLocationManager();
+
+        if (hasLastLocation()) {
+            setLatitude(getLastLatitude());
+            setLongitude(getLastLongitude());
+        } else {
+            setLatitude(LATITUDE_SUSINLEE);
+            setLongitude(LONGITUDE_SUSINLEE);
+        }
 
         // Get high accuracy provider
         mLocationProvider = lm.getProvider(lm.getBestProvider(createFineCritera(),true));
@@ -120,20 +130,11 @@ public class LocationHelper {
 
             // Latitude
             double latitude = l.getLatitude();
-            dLatitude = latitude;
-            boolean reLat = mMain.setLatitude(latitude);
+            setLatitude(latitude);
 
             // Longitude
             double longitude = l.getLongitude();
-            dLongitude = longitude;
-            boolean reLon = mMain.setLongitude(longitude);
-
-            if (reLat && reLon) {
-                return;
-            }
-
-            // Update Location String
-            mMain.updateCoordinateString();
+            setLongitude(longitude);
 
             // Update View
             mMain.updateView();
@@ -166,18 +167,11 @@ public class LocationHelper {
 
             // Latitude
             double latitude = l.getLatitude();
-            boolean reLat = mMain.setLatitude(latitude);
+            setLatitude(latitude);
 
             // Longitude
             double longitude = l.getLongitude();
-            boolean reLon = mMain.setLongitude(longitude);
-
-            if (reLat && reLon) {
-                return;
-            }
-
-            // Update Location String
-            mMain.updateCoordinateString();
+            setLongitude(longitude);
 
             // Update View
             mMain.updateView();
@@ -224,19 +218,22 @@ public class LocationHelper {
         return address;
     }
 
-    public boolean hasLastLocation() {
+    // Check LastLocation
+    public static boolean hasLastLocation() {
         if (mLocationManager.getLastKnownLocation(mLocationProvider.getName())==null) {
             return false;
         }
         return true;
     }
 
-    public double getLastLatitude() {
+    // Return the last latitude value
+    public static double getLastLatitude() {
         Location l = mLocationManager.getLastKnownLocation(mLocationProvider.getName());
         return l.getLatitude();
     }
 
-    public double getLastLongitude() {
+    // Return the last longitude value
+    public static double getLastLongitude() {
         Location l = mLocationManager.getLastKnownLocation(mLocationProvider.getName());
         return l.getLongitude();
     }
@@ -245,6 +242,16 @@ public class LocationHelper {
     private Locale getCurrentLocale() {
         Locale locale = mContext.getResources().getConfiguration().locale;
         return locale;
+    }
+
+    // Set latitude
+    public static void setLatitude(double latitude) {
+        dLatitude = latitude;
+    }
+
+    // Set longitude
+    public static void setLongitude(double longitude) {
+        dLongitude = longitude;
     }
 
     // Get Latitude
@@ -261,7 +268,7 @@ public class LocationHelper {
         return lon;
     }
 
-
+    // Return DMS latitude
     public String getLatitudeDMS() {
         String ddLat = "";
 
@@ -274,6 +281,7 @@ public class LocationHelper {
         return ddLat;
     }
 
+    // Return DMS longitude
     public String getLongitudeDMS() {
         String ddLon = "";
 
@@ -298,7 +306,7 @@ public class LocationHelper {
         String msg = "[D:"+d+"][M:"+m+"][S:"+s+"]";
 
         String strDMS = "";
-        //strDMS = String.format("%d", d) + "¡Æ" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+        //strDMS = String.format("%d", d) + "°" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
         strDMS = String.format("%d", d) + "%C2%B0" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
 
         return strDMS;
@@ -330,5 +338,15 @@ public class LocationHelper {
         c.setPowerRequirement(Criteria.POWER_HIGH);
 
         return c;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

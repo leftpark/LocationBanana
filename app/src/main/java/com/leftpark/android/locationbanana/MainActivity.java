@@ -39,9 +39,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // Marker
     private static Marker mMarker;
 
-    // LatLng
-    private static LatLng curLatLng;
-
     // Views
     private TextView mTvCoordiateLat;   // TextView for Latitude
     private TextView mTvCoordiateLon;   // TextView for Longitude
@@ -49,12 +46,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView mTvCoordiateLonDMS;   // TextView for Longitude (DMS)
     private Button mBtnShare;
     private Button mBtnPosition;
-
-    // Values
-    private String strCoordinateLat;
-    private String strCoordinateLon;
-    double dLatitude;
-    double dLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +67,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // Initialize ShareHelper
         initShare();
-
-        // Initialize Values
-        initializeValue();
 
         // Initialize Views
         initializeView();
@@ -109,41 +97,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void initializeValue() {
-
-        if (mLocationHelper == null) {
-            dLatitude = 0;
-            dLongitude = 0;
-        } else if (mLocationHelper.hasLastLocation()) {
-            dLatitude = mLocationHelper.getLastLatitude();
-            dLongitude = mLocationHelper.getLastLongitude();
-        } else {
-            dLatitude = mLocationHelper.LATITUDE_SUSINLEE;
-            dLongitude = mLocationHelper.LONGITUDE_SUSINLEE;
-        }
-
-        strCoordinateLat = getString(R.string.coordinate_latitude, dLatitude);
-        strCoordinateLon = getString(R.string.coordinate_longitude, dLongitude);
-    }
-
-    private void initializeView() {
-
-        // Coordinate TextView
-        mTvCoordiateLat = (TextView)findViewById(R.id.tv_coordinate_latitude);
-        mTvCoordiateLon = (TextView)findViewById(R.id.tv_coordinate_longitude);
-
-        mTvCoordiateLatDMS = (TextView)findViewById(R.id.tv_coordinate_latitude_dms);
-        mTvCoordiateLonDMS = (TextView)findViewById(R.id.tv_coordinate_longitude_dms);
-
-        // Set Shar Button
-        mBtnShare = (Button)findViewById(R.id.btn_share);
-        mBtnShare.setOnClickListener(this);
-
-        // Set Position Button
-        mBtnPosition = (Button)findViewById(R.id.btn_position);
-        mBtnPosition.setOnClickListener(this);
-    }
-
     //+Initialize LocationProvider
     private void initLocation() {
 
@@ -164,16 +117,49 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
     //-Initialize ShareHelper
 
+    private void initializeView() {
+
+        // Coordinate TextView
+        mTvCoordiateLat = (TextView)findViewById(R.id.tv_coordinate_latitude);
+        mTvCoordiateLon = (TextView)findViewById(R.id.tv_coordinate_longitude);
+
+        mTvCoordiateLatDMS = (TextView)findViewById(R.id.tv_coordinate_latitude_dms);
+        mTvCoordiateLonDMS = (TextView)findViewById(R.id.tv_coordinate_longitude_dms);
+
+        // Set Shar Button
+        mBtnShare = (Button)findViewById(R.id.btn_share);
+        mBtnShare.setOnClickListener(this);
+
+        // Set Position Button
+        mBtnPosition = (Button)findViewById(R.id.btn_position);
+        mBtnPosition.setOnClickListener(this);
+}
+
     @Override
     protected void onResume() {
         super.onResume();
         initializeMap();
 
         // Test
-        updateCoordinateString();
         updateView();
         showCurrentLocation();
         // Test
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save LocationHelper to Bundle
+        outState.putParcelable("LocationHelepr", mLocationHelper);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Get LocationHelper from Bundle
+        mLocationHelper = savedInstanceState.getParcelable("LocationHelper");
     }
 
     @Override
@@ -226,46 +212,54 @@ public class MainActivity extends Activity implements View.OnClickListener {
         return;
     }
 
-    //+Update Location String
-    public void updateCoordinateString() {
-        strCoordinateLat = getString(R.string.coordinate_latitude, dLatitude);
-        strCoordinateLon = getString(R.string.coordinate_longitude, dLongitude);
-    }
-    //-Update Location String
-
-    //+Set Latitude
-    public boolean setLatitude(double latitude) {
-        if (dLatitude == latitude) {
-            return false;
+    private String getStrLatitude() {
+        String latitude = "";
+        if (mLocationHelper != null) {
+            latitude = getString(R.string.coordinate_longitude, mLocationHelper.getLatitude());
         }
-        dLatitude = latitude;
-        return true;
+        return latitude;
     }
-    //-Set Latitude
+
+    private String getStrLatitudeDMS() {
+        String latitudeDMS = "";
+        if (mLocationHelper != null) {
+            latitudeDMS = getString(R.string.coordinate_longitude_dms, mLocationHelper.getLatitudeDMS());
+        }
+        return latitudeDMS;
+    }
+
+    private String getStrLongitude() {
+        String longitude = "";
+        if (mLocationHelper != null) {
+            longitude = getString(R.string.coordinate_longitude, mLocationHelper.getLongitude());
+        }
+        return longitude;
+    }
+
+    private String getStrLongitudeDMS() {
+        String longitudeDMS = "";
+        if (mLocationHelper != null) {
+            longitudeDMS = getString(R.string.coordinate_longitude_dms, mLocationHelper.getLongitudeDMS());
+        }
+        return longitudeDMS;
+    }
 
     //+Get Latitude
     public double getLatitude() {
         double lat = 0.0;
-        lat = dLatitude;
-
+        if (mLocationHelper != null) {
+            lat = mLocationHelper.getLatitude();
+        }
         return lat;
     }
     //-Get Latitude
 
-    //+Set Longitude
-    public boolean setLongitude(double longitude) {
-        if (dLongitude == longitude ) {
-            return false;
-        }
-        dLongitude = longitude;
-        return true;
-    }
-    //-Set Longitude
-
     //+Get Longitude
     public double getLongitude() {
         double lon = 0.0;
-        lon = dLongitude;
+        if (mLocationHelper != null) {
+            lon = mLocationHelper.getLongitude();
+        }
 
         return lon;
     }
@@ -273,11 +267,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //+Update Views
     public void updateView() {
-        mTvCoordiateLat.setText(strCoordinateLat);
-        mTvCoordiateLon.setText(strCoordinateLon);
+        mTvCoordiateLat.setText(getStrLatitude());
+        mTvCoordiateLon.setText(getStrLongitude());
 
-        mTvCoordiateLatDMS.setText(getString(R.string.coordinate_latitude_dms, mLocationHelper.getLatitudeDMS()));
-        mTvCoordiateLonDMS.setText(getString(R.string.coordinate_longitude_dms, mLocationHelper.getLongitudeDMS()));
+        mTvCoordiateLatDMS.setText(getStrLatitudeDMS());
+        mTvCoordiateLonDMS.setText(getStrLongitudeDMS());
     }
     //+Update Views
 
@@ -288,7 +282,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             mMarker.remove();
         }
 
-        LatLng ll = new LatLng(dLatitude, dLongitude);
+        LatLng ll = new LatLng(getLatitude(), getLongitude());
 
         // Move the camera instantly to current postion with a zoom of 15.
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ll, 15));
