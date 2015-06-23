@@ -12,7 +12,7 @@ import com.leftpark.android.locationbanana.MainActivity;
 public class ShareHelper {
 
     // TAG
-    private static final String TAG = "Location_Banana";
+    private static final String TAG = "LocationBanana";
 
     // Google Map URl
     private static final String URL_GOOGLE_MAP = "https://www.google.com/maps/@";

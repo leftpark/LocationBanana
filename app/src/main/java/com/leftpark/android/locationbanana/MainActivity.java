@@ -24,7 +24,7 @@ import com.leftpark.android.locationbanana.util.ShareHelper;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     // TAG
-    private static final String TAG = "Location_Banana";
+    private static final String TAG = "LocationBanana";
 
     private static Context mContext;
 
@@ -51,6 +51,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"onCreate()");
 
         mContext = this;
         setContentView(R.layout.activity_main);
@@ -139,6 +140,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG,"onResume()");
         initializeMap();
 
         // Test

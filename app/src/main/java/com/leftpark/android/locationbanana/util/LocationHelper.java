@@ -26,11 +26,15 @@ import java.util.Locale;
 public class LocationHelper implements Parcelable{
 
     // TAG
-    private static final String TAG = "LocationHelper";
+    private static final String TAG = "LocationBanana";
 
     // Default Latitude and Longitude of SUSINLEE in SEOUL
     public static final double LATITUDE_SUSINLEE = 37.571006;
     public static final double LONGITUDE_SUSINLEE = 126.976940;
+
+    // Values
+    private static double dLatitude = LATITUDE_SUSINLEE;
+    private static double dLongitude = LONGITUDE_SUSINLEE;
 
     // DMS
     public static final int DMS_TYPE_URL = 1;
@@ -48,9 +52,11 @@ public class LocationHelper implements Parcelable{
     // High accuracy provider
     private static LocationProvider mLocationProvider;
 
-    // Values
-    private static double dLatitude = LATITUDE_SUSINLEE;
-    private static double dLongitude = LONGITUDE_SUSINLEE;
+    // High Accuracy LocationListener
+    private static LocationListener mHighListener;
+
+    // Low Accuracy LocationListener
+    private static LocationListener mLowListener;
 
     // Construction with nothing
     public LocationHelper() {
@@ -74,6 +80,9 @@ public class LocationHelper implements Parcelable{
     // Init LocationProvider
     public static void init() {
         LocationManager lm = getLocationManager();
+
+        // [FIX] 2015.06.23. leftpark, fix IllegalArgumentException: invalid listener: null
+        initListener();
 
         // Get high accuracy provider
         mLocationProvider = lm.getProvider(lm.getBestProvider(createFineCritera(),true));
@@ -108,6 +117,10 @@ public class LocationHelper implements Parcelable{
             mLowListener = null;
         }
 
+        if (mLocationProvider != null) {
+            mLocationProvider = null;
+        }
+
         // LocationManager
         if (mLocationManager != null) {
             mLocationManager = null;
@@ -124,79 +137,83 @@ public class LocationHelper implements Parcelable{
         }
     }
 
-    //+High Accuracy LocationListener
-    private static LocationListener mHighListener = new LocationListener() {
+    // [FIX_BEGIN] 2015.06.23. leftpark, fix IllegalArgumentException: invalid listener: null
+    private static void initListener() {
+        //+High Accuracy LocationListener
+        mHighListener = new LocationListener() {
 
-        @Override
-        public void onLocationChanged(Location location) {
-            Log.d(TAG,"onLocationChanged(h) S");
-            Location l = location;
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.d(TAG,"onLocationChanged(h) S");
+                Location l = location;
 
-            // Latitude
-            double latitude = l.getLatitude();
-            setLatitude(latitude);
+                // Latitude
+                double latitude = l.getLatitude();
+                setLatitude(latitude);
 
-            // Longitude
-            double longitude = l.getLongitude();
-            setLongitude(longitude);
+                // Longitude
+                double longitude = l.getLongitude();
+                setLongitude(longitude);
 
-            // Update View
-            mMain.updateView();
-        }
+                // Update View
+                mMain.updateView();
+            }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
 
-        }
+            }
 
-        @Override
-        public void onProviderEnabled(String provider) {
+            @Override
+            public void onProviderEnabled(String provider) {
 
-        }
+            }
 
-        @Override
-        public void onProviderDisabled(String provider) {
+            @Override
+            public void onProviderDisabled(String provider) {
 
-        }
-    };
-    //-High Accuracy LocationListener
+            }
+        };
+        //-High Accuracy LocationListener
 
-    //+Low Accuracy LocationListener
-    private static LocationListener mLowListener = new LocationListener() {
+        //+Low Accuracy LocationListener
+        mLowListener = new LocationListener() {
 
-        @Override
-        public void onLocationChanged(Location location) {
-            Log.d(TAG, "onLocationChanged(l) S");
-            Location l = location;
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.d(TAG, "onLocationChanged(l) S");
+                Location l = location;
 
-            // Latitude
-            double latitude = l.getLatitude();
-            setLatitude(latitude);
+                // Latitude
+                double latitude = l.getLatitude();
+                setLatitude(latitude);
 
-            // Longitude
-            double longitude = l.getLongitude();
-            setLongitude(longitude);
+                // Longitude
+                double longitude = l.getLongitude();
+                setLongitude(longitude);
 
-            // Update View
-            mMain.updateView();
-        }
+                // Update View
+                mMain.updateView();
+            }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
 
-        }
+            }
 
-        @Override
-        public void onProviderEnabled(String provider) {
+            @Override
+            public void onProviderEnabled(String provider) {
 
-        }
+            }
 
-        @Override
-        public void onProviderDisabled(String provider) {
+            @Override
+            public void onProviderDisabled(String provider) {
 
-        }
-    };
-    //-Low Accuracy LocationListener
+            }
+        };
+        //-Low Accuracy LocationListener
+    }
+    // [FIX_EDN] 2015.06.23. leftpark, fix IllegalArgumentException: invalid listener: null
 
     // Get an address with latitude and longitude
     public String getAddress(double lat, double lon) {
