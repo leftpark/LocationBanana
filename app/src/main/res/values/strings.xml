@@ -15,8 +15,8 @@
     <string name="coordinate_longitude">Lon : %1$.6f</string>
 
     <!-- Coordinate : DMS -->
-    <string name="coordinate_latitude_dms">(DMS) : %1$s</string>
-    <string name="coordinate_longitude_dms">(DMS) : %1$s</string>
+    <string name="coordinate_latitude_dms">(DMS) %1$s</string>
+    <string name="coordinate_longitude_dms">(DMS) %1$s</string>
 
     <!-- Current Location -->
     <string name="current_location">Current location</string>

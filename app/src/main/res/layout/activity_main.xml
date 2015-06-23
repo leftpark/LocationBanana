@@ -12,7 +12,7 @@
         android:layout_marginTop="@dimen/coordinate_layout_margin_top"
         android:layout_marginLeft="@dimen/coordinate_layout_margin_left"
         android:layout_marginRight="@dimen/coordinate_layout_margin_right"
-        android:background="@color/banana_white"
+        android:background="@color/banana_green"
         android:orientation="horizontal">
 
         <TextView
@@ -40,7 +40,7 @@
         android:layout_marginLeft="@dimen/coordinate_layout_margin_left"
         android:layout_marginRight="@dimen/coordinate_layout_margin_right"
         android:layout_marginBottom="@dimen/coordinate_layout_margin_bottom"
-        android:background="@color/banana_white"
+        android:background="@color/banana_green"
         android:orientation="horizontal">
 
         <TextView

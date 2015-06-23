@@ -295,9 +295,15 @@ public class LocationHelper implements Parcelable{
         String ddLat = "";
 
         if (hasLastLocation()) {
-            ddLat = dd2dms(type, getLastLatitude()) + "%22N";
+            ddLat = dd2dms(type, getLastLatitude());
         } else {
-            ddLat = dd2dms(type, LATITUDE_SUSINLEE) + "%22N";
+            ddLat = dd2dms(type, LATITUDE_SUSINLEE);
+        }
+
+        if (type == DMS_TYPE_STR) {
+            ddLat = ddLat + "\"N";
+        } else if (type == DMS_TYPE_URL) {
+            ddLat = ddLat + "%22N";
         }
 
         return ddLat;
@@ -308,9 +314,15 @@ public class LocationHelper implements Parcelable{
         String ddLon = "";
 
         if (hasLastLocation()) {
-            ddLon = dd2dms(type, getLastLongitude()) + "%22E";
+            ddLon = dd2dms(type, getLastLongitude());
         } else {
-            ddLon = dd2dms(type, LONGITUDE_SUSINLEE) + "%22E";
+            ddLon = dd2dms(type, LONGITUDE_SUSINLEE);
+        }
+
+        if (type == DMS_TYPE_STR) {
+            ddLon = ddLon + "\"E";
+        } else if (type == DMS_TYPE_URL) {
+            ddLon = ddLon + "%22E";
         }
 
         return ddLon;
@@ -329,9 +341,9 @@ public class LocationHelper implements Parcelable{
 
         String strDMS = "";
         if (type == DMS_TYPE_STR) {
-            strDMS = String.format("%d", d) + "°" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+            strDMS = String.format("%d", d) + "°" + String.format("%02d", m) + "'" + String.format("%.1f", s);
         } else if (type == DMS_TYPE_URL) {
-            strDMS = String.format("%d", d) + "%C2%B0" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+            strDMS = String.format("%d", d) + "%C2%B0" + String.format("%02d", m) + "'" + String.format("%.1f", s);
         }
 
         return strDMS;

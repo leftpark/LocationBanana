@@ -220,7 +220,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private String getStrLatitude() {
         String latitude = "";
         if (mLocationHelper != null) {
-            latitude = getString(R.string.coordinate_longitude, mLocationHelper.getLatitude());
+            latitude = getString(R.string.coordinate_latitude, mLocationHelper.getLatitude());
         }
         return latitude;
     }
@@ -228,7 +228,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private String getStrLatitudeDMS() {
         String latitudeDMS = "";
         if (mLocationHelper != null) {
-            latitudeDMS = getString(R.string.coordinate_longitude_dms, mLocationHelper.getLatitudeDMS(LocationHelper.DMS_TYPE_STR));
+            latitudeDMS = getString(R.string.coordinate_latitude_dms, mLocationHelper.getLatitudeDMS(LocationHelper.DMS_TYPE_STR));
         }
         return latitudeDMS;
     }
