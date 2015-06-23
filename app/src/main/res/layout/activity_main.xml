@@ -90,7 +90,7 @@
             android:layout_width="@dimen/control_btn_width"
             android:layout_height="@dimen/control_btn_height"
             android:text="@string/share"
-            android:background="@drawable/banana_green_selector"/>
+            android:background="@drawable/banana_button_ellipse"/>
 
         <LinearLayout
             android:layout_width="@dimen/control_gab_width"
@@ -102,7 +102,7 @@
             android:layout_width="@dimen/control_btn_width"
             android:layout_height="@dimen/control_btn_height"
             android:text="@string/update_map"
-            android:background="@drawable/banana_green_selector"/>
+            android:background="@drawable/banana_button_ellipse"/>
 
     </LinearLayout>
 

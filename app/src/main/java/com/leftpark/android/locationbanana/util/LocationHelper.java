@@ -32,6 +32,10 @@ public class LocationHelper implements Parcelable{
     public static final double LATITUDE_SUSINLEE = 37.571006;
     public static final double LONGITUDE_SUSINLEE = 126.976940;
 
+    // DMS
+    public static final int DMS_TYPE_URL = 1;
+    public static final int DMS_TYPE_STR = 2;
+
     // MainActivity
     private static MainActivity mMain;
 
@@ -270,32 +274,32 @@ public class LocationHelper implements Parcelable{
     }
 
     // Return DMS latitude
-    public String getLatitudeDMS() {
+    public String getLatitudeDMS(int type) {
         String ddLat = "";
 
         if (hasLastLocation()) {
-            ddLat = dd2dms(getLastLatitude()) + "%22N";
+            ddLat = dd2dms(type, getLastLatitude()) + "%22N";
         } else {
-            ddLat = dd2dms(LATITUDE_SUSINLEE) + "%22N";
+            ddLat = dd2dms(type, LATITUDE_SUSINLEE) + "%22N";
         }
 
         return ddLat;
     }
 
     // Return DMS longitude
-    public String getLongitudeDMS() {
+    public String getLongitudeDMS(int type) {
         String ddLon = "";
 
         if (hasLastLocation()) {
-            ddLon = dd2dms(getLastLongitude()) + "%22E";
+            ddLon = dd2dms(type, getLastLongitude()) + "%22E";
         } else {
-            ddLon = dd2dms(LONGITUDE_SUSINLEE) + "%22E";
+            ddLon = dd2dms(type, LONGITUDE_SUSINLEE) + "%22E";
         }
 
         return ddLon;
     }
 
-    public String dd2dms(double decimal_degrees) {
+    public String dd2dms(int type, double decimal_degrees) {
         double dd = decimal_degrees;
 
         int d = new Integer((int)dd);
@@ -307,8 +311,11 @@ public class LocationHelper implements Parcelable{
         String msg = "[D:"+d+"][M:"+m+"][S:"+s+"]";
 
         String strDMS = "";
-        //strDMS = String.format("%d", d) + "°" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
-        strDMS = String.format("%d", d) + "%C2%B0" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+        if (type == DMS_TYPE_STR) {
+            strDMS = String.format("%d", d) + "°" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+        } else if (type == DMS_TYPE_URL) {
+            strDMS = String.format("%d", d) + "%C2%B0" + String.format("%02d", m) + "'" + String.format("%.1f", s) + ".";
+        }
 
         return strDMS;
     }

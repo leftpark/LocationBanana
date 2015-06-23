@@ -45,8 +45,8 @@ public class ShareHelper {
     public String getUrlGoogleMap() {
         String url = "";
 
-        String latitudeDMS = mLocationHelper.getLatitudeDMS();
-        String longitudeDMS = mLocationHelper.getLongitudeDMS();
+        String latitudeDMS = mLocationHelper.getLatitudeDMS(LocationHelper.DMS_TYPE_URL);
+        String longitudeDMS = mLocationHelper.getLongitudeDMS(LocationHelper.DMS_TYPE_URL);
 
         double latitude = mLocationHelper.getLatitude();
         double longitude = mLocationHelper.getLongitude();
@@ -63,7 +63,8 @@ public class ShareHelper {
                 +String.format("%.06f",latitude)
                 +","
                 +String.format("%.06f",longitude)
-                +",15z";
+                +",15z"
+                +"/data=!3m1!4b1!4m2!3m1!1s0x0:0x0";
 
         return url;
     }
@@ -73,6 +74,7 @@ public class ShareHelper {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "«… ∞Ì¡§");
         intent.putExtra(Intent.EXTRA_TEXT, getUrlGoogleMap());
 
         return intent;
