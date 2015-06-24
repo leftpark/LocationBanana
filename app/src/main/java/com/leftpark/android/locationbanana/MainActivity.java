@@ -19,12 +19,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.leftpark.android.locationbanana.util.LocationHelper;
 import com.leftpark.android.locationbanana.util.ShareHelper;
+import com.leftpark.android.locationbanana.util.ShortenerHelper;
 
-
+/**
+ * Created by leftpark.
+ */
 public class MainActivity extends Activity implements View.OnClickListener {
 
     // TAG
     private static final String TAG = "LocationBanana";
+
+    // Debug
+    private static final boolean DBG = true;
 
     private static Context mContext;
 
@@ -47,11 +53,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView mTvCoordiateLonDMS;   // TextView for Longitude (DMS)
     private Button mBtnShare;
     private Button mBtnPosition;
+    private Button mBtnShortener;   // Button for URL Shortener
+    private TextView mTvShortener;  // TextView for URL Shortener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"onCreate()");
+        Log.d(TAG, "onCreate()");
 
         mContext = this;
         setContentView(R.layout.activity_main);
@@ -128,19 +136,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mTvCoordiateLatDMS = (TextView)findViewById(R.id.tv_coordinate_latitude_dms);
         mTvCoordiateLonDMS = (TextView)findViewById(R.id.tv_coordinate_longitude_dms);
 
-        // Set Shar Button
+        // Initialize Shar Button
         mBtnShare = (Button)findViewById(R.id.btn_share);
         mBtnShare.setOnClickListener(this);
 
-        // Set Position Button
+        // Initialize Position Button
         mBtnPosition = (Button)findViewById(R.id.btn_position);
         mBtnPosition.setOnClickListener(this);
+
+        // Initialize Shortener Button
+        mBtnShortener = (Button)findViewById(R.id.btn_shortener);
+        mBtnShortener.setOnClickListener(this);
+
+        // Initialize Shortener TextView
+        mTvShortener = (TextView)findViewById(R.id.tv_shortener);
 }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume()");
+        Log.d(TAG, "onResume()");
         initializeMap();
 
         // Test
@@ -208,10 +223,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_share:
                 Intent intent = mShareHelper.getShareIntent();
                 startActivity(Intent.createChooser(intent, getResources().getString(R.string.share_via)));
-                //Toast.makeText(mContext, getResources().getString(R.string.share), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_position:
                 showCurrentLocation();
+                break;
+            case R.id.btn_shortener:
+                getShortener();
                 break;
         }
         return;
@@ -308,5 +325,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Marker marker;
         marker = mMarker;
         return marker;
+    }
+
+    // Set Shortener
+    public void setShortenerTextView(String url) {
+        mTvShortener.setText(url);
+    }
+
+    // Get Shortener
+    private boolean getShortener() {
+        if (DBG) Log.d(TAG,"getShortener()");
+
+        ShortenerHelper shortenerHelper = new ShortenerHelper(mContext);
+        if (shortenerHelper != null) {
+            if (mShareHelper != null) {
+                String longURL = mShareHelper.getUrlGoogleMap();
+                shortenerHelper.execute(longURL);
+                return true;
+            }
+        }
+        return false;
     }
 }

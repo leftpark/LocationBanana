@@ -4,6 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="empty">empty</string>
+
     <string name="update_map">Update Map</string>
     <string name="share">Sharing</string>
     <string name="share_via">Share via</string>
@@ -20,4 +22,7 @@
 
     <!-- Current Location -->
     <string name="current_location">Current location</string>
+
+    <!-- Shortener -->
+    <string name="shortener">Shortener</string>
 </resources>
