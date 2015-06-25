@@ -10,6 +10,9 @@
     <string name="share">공유하기</string>
     <string name="share_via">다음으로 공유하기</string>
 
+    <!-- Address -->
+    <string name="address">주소 : %1$s</string>
+
     <!-- Coordinate -->
     <string name="coordinate_latitude_init">위도 : -.----</string>
     <string name="coordinate_longitude_init">경도 : -.----</string>

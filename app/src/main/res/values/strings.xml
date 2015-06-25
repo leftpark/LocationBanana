@@ -10,6 +10,9 @@
     <string name="share">Sharing</string>
     <string name="share_via">Share via</string>
 
+    <!-- Address -->
+    <string name="address">Add : %1$s</string>
+
     <!-- Coordinate : DD -->
     <string name="coordinate_latitude_init">Lat : -.----</string>
     <string name="coordinate_longitude_init">Lon : -.----</string>

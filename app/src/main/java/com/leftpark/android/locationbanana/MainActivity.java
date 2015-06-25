@@ -64,6 +64,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
     private TextView mTvCoordiateLon;   // TextView for Longitude
     private TextView mTvCoordiateLatDMS;   // TextView for Latitude (DMS)
     private TextView mTvCoordiateLonDMS;   // TextView for Longitude (DMS)
+    private TextView mTvAddress;    // TextView for Address
     private Button mBtnShare;
     private Button mBtnPosition;
     private Button mBtnShortener;   // Button for URL Shortener
@@ -204,6 +205,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
         mTvCoordiateLatDMS = (TextView)findViewById(R.id.tv_coordinate_latitude_dms);
         mTvCoordiateLonDMS = (TextView)findViewById(R.id.tv_coordinate_longitude_dms);
 
+        // Address TextView
+        mTvAddress = (TextView)findViewById(R.id.tv_address);
+
         // Initialize Shar Button
         mBtnShare = (Button)findViewById(R.id.btn_share);
         mBtnShare.setOnClickListener(this);
@@ -221,7 +225,19 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
 
         // Initialize Compass Needle ImageView
         mIvCompass = (ImageView)findViewById(R.id.iv_compass_needle);
-}
+    }
+
+    //+Update Views
+    public void updateView() {
+        mTvCoordiateLat.setText(getStrLatitude());
+        mTvCoordiateLon.setText(getStrLongitude());
+
+        mTvCoordiateLatDMS.setText(getStrLatitudeDMS());
+        mTvCoordiateLonDMS.setText(getStrLongitudeDMS());
+
+        mTvAddress.setText(getAddress());
+    }
+    //+Update Views
 
     @Override
     protected void onResume() {
@@ -396,15 +412,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
     }
     //-Get Longitude
 
-    //+Update Views
-    public void updateView() {
-        mTvCoordiateLat.setText(getStrLatitude());
-        mTvCoordiateLon.setText(getStrLongitude());
-
-        mTvCoordiateLatDMS.setText(getStrLatitudeDMS());
-        mTvCoordiateLonDMS.setText(getStrLongitudeDMS());
+    // Get Address
+    private String getAddress() {
+        String add = "";
+        if (mLocationHelper != null) {
+            add = getString(R.string.address, mLocationHelper.getAddress());
+        }
+        return add;
     }
-    //+Update Views
 
     //+Show Current Location
     private void showCurrentLocation() {

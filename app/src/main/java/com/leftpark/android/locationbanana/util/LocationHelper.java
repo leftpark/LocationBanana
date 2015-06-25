@@ -215,6 +215,14 @@ public class LocationHelper implements Parcelable{
     }
     // [FIX_EDN] 2015.06.23. leftpark, fix IllegalArgumentException: invalid listener: null
 
+    public String getAddress() {
+        String add = "";
+
+        add = getAddress(dLatitude, dLongitude);
+
+        return add;
+    }
+
     // Get an address with latitude and longitude
     public String getAddress(double lat, double lon) {
 
@@ -223,7 +231,7 @@ public class LocationHelper implements Parcelable{
 
         List<Address> lAddress;
 
-        String address = null;
+        String address = "";
 
         try {
             if (geoCoder != null) {
