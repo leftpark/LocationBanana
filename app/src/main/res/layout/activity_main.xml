@@ -12,7 +12,7 @@
         android:layout_marginTop="@dimen/coordinate_layout_margin_top"
         android:layout_marginLeft="@dimen/coordinate_layout_margin_left"
         android:layout_marginRight="@dimen/coordinate_layout_margin_right"
-        android:background="@color/banana_white"
+        android:background="@color/banana_yellow"
         android:orientation="horizontal">
 
         <TextView
@@ -25,8 +25,8 @@
 
         <TextView
             android:id="@+id/tv_coordinate_latitude_dms"
-            android:layout_width="@dimen/coordinate_tv_width"
-            android:layout_height="@dimen/coordinate_tv_height"
+            android:layout_width="@dimen/coordinate_dms_tv_width"
+            android:layout_height="@dimen/coordinate_dms_tv_height"
             android:gravity="center_vertical"
             android:textColor="@color/banana_black"
             android:singleLine="true"
@@ -39,7 +39,7 @@
         android:layout_height="@dimen/coordinate_layout_height"
         android:layout_marginLeft="@dimen/coordinate_layout_margin_left"
         android:layout_marginRight="@dimen/coordinate_layout_margin_right"
-        android:background="@color/banana_white"
+        android:background="@color/banana_yellow"
         android:orientation="horizontal">
 
         <TextView
@@ -52,8 +52,8 @@
 
         <TextView
             android:id="@+id/tv_coordinate_longitude_dms"
-            android:layout_width="@dimen/coordinate_tv_width"
-            android:layout_height="@dimen/coordinate_tv_height"
+            android:layout_width="@dimen/coordinate_dms_tv_width"
+            android:layout_height="@dimen/coordinate_dms_tv_height"
             android:gravity="center_vertical"
             android:textColor="@color/banana_black"
             android:singleLine="true"
@@ -67,7 +67,7 @@
         android:layout_marginLeft="@dimen/coordinate_layout_margin_left"
         android:layout_marginRight="@dimen/coordinate_layout_margin_right"
         android:layout_marginBottom="@dimen/coordinate_layout_margin_bottom"
-        android:background="@color/banana_white"
+        android:background="@color/banana_yellow"
         android:orientation="horizontal">
 
         <TextView

@@ -229,13 +229,18 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
 
     //+Update Views
     public void updateView() {
-        mTvCoordiateLat.setText(getStrLatitude());
-        mTvCoordiateLon.setText(getStrLongitude());
+        synchronized (this) {
+            mTvCoordiateLat.setText(getStrLatitude());
+            mTvCoordiateLon.setText(getStrLongitude());
 
-        mTvCoordiateLatDMS.setText(getStrLatitudeDMS());
-        mTvCoordiateLonDMS.setText(getStrLongitudeDMS());
+            mTvCoordiateLatDMS.setText(getStrLatitudeDMS());
+            mTvCoordiateLonDMS.setText(getStrLongitudeDMS());
 
-        mTvAddress.setText(getAddress());
+            mTvAddress.setText(getAddress());
+
+            String tmp = Integer.toString(mLocationHelper.getGpsStatus());
+            mTvShortener.setText(tmp);
+        }
     }
     //+Update Views
 

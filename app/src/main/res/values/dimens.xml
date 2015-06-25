@@ -12,8 +12,11 @@
     <dimen name="coordinate_layout_margin_left">10dp</dimen>
     <dimen name="coordinate_layout_margin_right">10dp</dimen>
 
-    <dimen name="coordinate_tv_width">170dp</dimen>
+    <dimen name="coordinate_tv_width">150dp</dimen>
     <dimen name="coordinate_tv_height">20dp</dimen>
+
+    <dimen name="coordinate_dms_tv_width">190dp</dimen>
+    <dimen name="coordinate_dms_tv_height">20dp</dimen>
     <!-- Coordinate -->
 
     <!-- Google Map -->

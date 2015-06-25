@@ -4,6 +4,8 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -58,6 +60,12 @@ public class LocationHelper implements Parcelable{
     // Low Accuracy LocationListener
     private static LocationListener mLowListener;
 
+    // GpsStatus.Listener
+    private static GpsStatus.Listener mGpsStatusListener;
+
+    // GpsStatus
+    private static int mGpsStatus = 0;
+
     // Construction with nothing
     public LocationHelper() {
         // Do something
@@ -84,6 +92,8 @@ public class LocationHelper implements Parcelable{
         // [FIX] 2015.06.23. leftpark, fix IllegalArgumentException: invalid listener: null
         initListener();
 
+        initGpsStatusListener();
+
         // Get high accuracy provider
         mLocationProvider = lm.getProvider(lm.getBestProvider(createFineCritera(),true));
         lm.requestLocationUpdates(mLocationProvider.getName(), 1000, 0, mHighListener);
@@ -91,6 +101,8 @@ public class LocationHelper implements Parcelable{
         // Get low accuracy provider
         LocationProvider low = lm.getProvider(lm.getBestProvider(createCoarseCritera(), true));
         //lm.requestLocationUpdates(low.getName(), 1000, 0, mLowListener);
+
+        lm.addGpsStatusListener(mGpsStatusListener);
 
         if (hasLastLocation()) {
             setLatitude(getLastLatitude());
@@ -104,6 +116,11 @@ public class LocationHelper implements Parcelable{
     public static void release() {
 
         LocationManager lm = getLocationManager();
+
+        if (mGpsStatusListener != null) {
+            lm.removeGpsStatusListener(mGpsStatusListener);
+            mGpsStatusListener = null;
+        }
 
         // High Accuracy LocationListener
         if (mHighListener != null) {
@@ -145,18 +162,25 @@ public class LocationHelper implements Parcelable{
             @Override
             public void onLocationChanged(Location location) {
                 Log.d(TAG,"onLocationChanged(h) S");
+                boolean changed = false;
                 Location l = location;
 
                 // Latitude
                 double latitude = l.getLatitude();
-                setLatitude(latitude);
+                if (setLatitude(latitude)) {
+                    changed = true;
+                }
 
                 // Longitude
                 double longitude = l.getLongitude();
-                setLongitude(longitude);
+                if (setLongitude(longitude)) {
+                    changed = true;
+                }
 
-                // Update View
-                mMain.updateView();
+                if (changed) {
+                    // Update View
+                    mMain.updateView();
+                }
             }
 
             @Override
@@ -182,18 +206,25 @@ public class LocationHelper implements Parcelable{
             @Override
             public void onLocationChanged(Location location) {
                 Log.d(TAG, "onLocationChanged(l) S");
+                boolean changed = false;
                 Location l = location;
 
                 // Latitude
                 double latitude = l.getLatitude();
-                setLatitude(latitude);
+                if (setLatitude(latitude)) {
+                    changed = true;
+                }
 
                 // Longitude
                 double longitude = l.getLongitude();
-                setLongitude(longitude);
+                if (setLongitude(longitude)) {
+                    changed = true;
+                }
 
-                // Update View
-                mMain.updateView();
+                if (changed) {
+                    // Update View
+                    mMain.updateView();
+                }
             }
 
             @Override
@@ -215,6 +246,28 @@ public class LocationHelper implements Parcelable{
     }
     // [FIX_EDN] 2015.06.23. leftpark, fix IllegalArgumentException: invalid listener: null
 
+    /**
+     * Initialize GpsStatus.Listener
+     * 0x00000001 : GPS_EVENT_STARTED (The GPS system has started)
+     * 0x00000002 : GPS_EVENT_STOPPED (The GPS system has stopped)
+     * 0x00000003 : GPS_EVNET_FIRST_FIX (Call getTimeToFirstFix() to find the time from start to first fix)
+     * 0x00000004 : GPS_EVENT_SATELLITE_STATUS(Call getSatellites() to retrieve the status fot each satellite)
+     */
+    private static void initGpsStatusListener() {
+        mGpsStatusListener = new GpsStatus.Listener() {
+            @Override
+            public void onGpsStatusChanged(int event) {
+                // Set GpsStatus
+                if (setGpsStatus(event)) {
+                    Log.d(TAG,"onGpsStatusChanged("+event+")");
+                    // UpdateView
+                    mMain.updateView();
+                }
+            }
+        };
+    }
+
+    // Get Address
     public String getAddress() {
         String add = "";
 
@@ -275,13 +328,21 @@ public class LocationHelper implements Parcelable{
     }
 
     // Set latitude
-    public static void setLatitude(double latitude) {
-        dLatitude = latitude;
+    public static boolean setLatitude(double latitude) {
+        if (dLatitude != latitude) {
+            dLatitude = latitude;
+            return true;
+        }
+        return false;
     }
 
     // Set longitude
-    public static void setLongitude(double longitude) {
-        dLongitude = longitude;
+    public static boolean setLongitude(double longitude) {
+        if (dLongitude != longitude) {
+            dLongitude = longitude;
+            return true;
+        }
+        return false;
     }
 
     // Get Latitude
@@ -355,6 +416,18 @@ public class LocationHelper implements Parcelable{
         }
 
         return strDMS;
+    }
+
+    private static boolean setGpsStatus(int status) {
+        if (mGpsStatus != status) {
+            mGpsStatus = status;
+            return true;
+        }
+        return false;
+    }
+
+    public int getGpsStatus() {
+        return mGpsStatus;
     }
 
     // This Criteria is high accuracy, high power, and cost.
