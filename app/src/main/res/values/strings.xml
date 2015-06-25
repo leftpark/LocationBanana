@@ -25,4 +25,9 @@
 
     <!-- Shortener -->
     <string name="shortener">Shortener</string>
+
+    <!-- Network Status -->
+    <string name="network_disconnected">Network disconnected.</string>
+    <!-- Refresh -->
+    <string name="refresh">Refresh</string>
 </resources>

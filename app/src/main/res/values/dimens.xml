@@ -33,6 +33,12 @@
     <dimen name="control_btn_width">165dp</dimen>
     <dimen name="control_btn_height">60dp</dimen>
 
+    <dimen name="share_btn_width">130dp</dimen>
+    <dimen name="share_btn_height">60dp</dimen>
+
+    <dimen name="compass_img_width">60dp</dimen>
+    <dimen name="compass_img_height">60dp</dimen>
+
     <dimen name="control_gab_width">10dp</dimen>
     <dimen name="control_gab_height">60dp</dimen>
     <!-- Control -->

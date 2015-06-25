@@ -4,6 +4,8 @@
     <string name="hello_world">안녕, 세상!</string>
     <string name="action_settings">설정</string>
 
+    <string name="empty">empty</string>
+
     <string name="update_map">지도에 표시</string>
     <string name="share">공유하기</string>
     <string name="share_via">다음으로 공유하기</string>
@@ -20,4 +22,12 @@
 
     <!-- Current Location -->
     <string name="current_location">현재 위치</string>
+
+    <!-- Shortener -->
+    <string name="shortener">Shortener</string>
+
+    <!-- Network Status -->
+    <string name="network_disconnected">네트워크가 연결되지 않았습니다.</string>
+    <!-- Refresh -->
+    <string name="refresh">새로고침</string>
 </resources>

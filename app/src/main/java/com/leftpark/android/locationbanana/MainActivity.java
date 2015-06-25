@@ -3,11 +3,18 @@ package com.leftpark.android.locationbanana;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,13 +25,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.leftpark.android.locationbanana.util.LocationHelper;
+import com.leftpark.android.locationbanana.util.NetworkHelper;
 import com.leftpark.android.locationbanana.util.ShareHelper;
 import com.leftpark.android.locationbanana.util.ShortenerHelper;
 
 /**
  * Created by leftpark.
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, SensorEventListener {
 
     // TAG
     private static final String TAG = "LocationBanana";
@@ -46,6 +54,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // Marker
     private static Marker mMarker;
 
+    // SensorManager for Compass
+    private SensorManager mSensorManager;
+    // Record the compass picture angle turned
+    private float mCurrentDegree = 0f;
+
     // Views
     private TextView mTvCoordiateLat;   // TextView for Latitude
     private TextView mTvCoordiateLon;   // TextView for Longitude
@@ -55,6 +68,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button mBtnPosition;
     private Button mBtnShortener;   // Button for URL Shortener
     private TextView mTvShortener;  // TextView for URL Shortener
+    private ImageView mIvCompass;   // Compass Needle
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +76,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Log.d(TAG, "onCreate()");
 
         mContext = this;
-        setContentView(R.layout.activity_main);
+
+        if (isNetworkConnected()) {
+            setContentView(R.layout.activity_main);
+
+            initMainLayout();
+        } else {
+            setContentView(R.layout.activity_empty);
+
+            initEmptyLayout();
+        }
+
+    }
+
+    @Override
+    public void recreate() {
+        super.recreate();
+    }
+
+    // activity_main.xml
+    private void initMainLayout() {
 
         try {
             // Loading map
@@ -72,6 +105,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             e.printStackTrace();
         }
 
+        // Initialize SensorManager
+        getSensorManager();
+
         // Initialize LocationProvider
         initLocation();
 
@@ -80,7 +116,39 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // Initialize Views
         initializeView();
+    }
 
+    // Get SensorManager Instance
+    private SensorManager getSensorManager() {
+        if (mSensorManager == null) {
+            mSensorManager = (SensorManager)mContext.getSystemService(Context.SENSOR_SERVICE);
+        }
+        return mSensorManager;
+    }
+
+    // activity_empty.xml
+    private void initEmptyLayout() {
+
+        Button btnRefresh = (Button)findViewById(R.id.btn_refresh);
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch(v.getId()) {
+                    case R.id.btn_refresh:
+                        //recreate();
+                        break;
+                }
+            }
+        });
+    }
+
+    // Check the status of Network Connection
+    private boolean isNetworkConnected() {
+        NetworkHelper networkHelper = new NetworkHelper(mContext);
+        if (networkHelper != null) {
+            return networkHelper.isNetworkConnected();
+        }
+        return false;
     }
 
     /**
@@ -150,18 +218,56 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // Initialize Shortener TextView
         mTvShortener = (TextView)findViewById(R.id.tv_shortener);
+
+        // Initialize Compass Needle ImageView
+        mIvCompass = (ImageView)findViewById(R.id.iv_compass_needle);
 }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
-        initializeMap();
 
-        // Test
-        updateView();
-        showCurrentLocation();
-        // Test
+        if (isNetworkConnected()) {
+
+            // Register SensorEventListener
+            mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
+
+            initializeMap();
+
+            // Test
+            updateView();
+            showCurrentLocation();
+            // Test
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        // Get the angle around the z-axis rotated
+        float degree = Math.round(event.values[0]);
+
+        RotateAnimation ra = new RotateAnimation(
+                mCurrentDegree,
+                -degree,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        // How long the animation will take place
+        ra.setDuration(210);
+
+        // Set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        mIvCompass.startAnimation(ra);
+        mCurrentDegree = -degree;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
     @Override
@@ -184,6 +290,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
+
+        // Unregister SensorEventListener
+        mSensorManager.unregisterListener(this);
     }
 
     @Override
@@ -228,7 +337,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 showCurrentLocation();
                 break;
             case R.id.btn_shortener:
-                getShortener();
+                //getShortener();
                 break;
         }
         return;

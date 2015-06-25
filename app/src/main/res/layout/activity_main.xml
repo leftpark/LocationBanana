@@ -87,10 +87,21 @@
 
         <Button
             android:id="@+id/btn_share"
-            android:layout_width="@dimen/control_btn_width"
-            android:layout_height="@dimen/control_btn_height"
+            android:layout_width="@dimen/share_btn_width"
+            android:layout_height="@dimen/share_btn_height"
             android:text="@string/share"
             android:background="@drawable/banana_button_ellipse"/>
+
+        <LinearLayout
+            android:layout_width="@dimen/control_gab_width"
+            android:layout_height="@dimen/control_gab_height"
+            android:background="@color/banana_yellow"/>
+        
+        <ImageView
+            android:id="@+id/iv_compass_needle"
+            android:layout_width="@dimen/compass_img_width"
+            android:layout_height="@dimen/compass_img_height"
+            android:background="@mipmap/compass_needle"/>
 
         <LinearLayout
             android:layout_width="@dimen/control_gab_width"
@@ -99,8 +110,8 @@
 
         <Button
             android:id="@+id/btn_position"
-            android:layout_width="@dimen/control_btn_width"
-            android:layout_height="@dimen/control_btn_height"
+            android:layout_width="@dimen/share_btn_width"
+            android:layout_height="@dimen/share_btn_height"
             android:text="@string/update_map"
             android:background="@drawable/banana_button_ellipse"/>
 
