@@ -53,6 +53,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
     // Google Map
     private GoogleMap googleMap;
 
+    // Google Map.Camera.zoom
+    private float mZoom = 0f;
+
     // Marker
     private static Marker mMarker;
 
@@ -171,7 +174,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
 
             // Set Enable of My Location
             //googleMap.setMyLocationEnabled(true);
+
+            // Setting a ChangeListener of my location for the Google Map
             //googleMap.setOnMyLocationChangeListener(mMLCListener);
+
+            // Setting a ClickListener for the Google Map
+            googleMap.setOnMapClickListener(mMCListener);
 
             // Set Enable of Zoom
             googleMap.getUiSettings().setZoomGesturesEnabled(true);
@@ -355,6 +363,18 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
         }
     }
 
+    /**
+     * 2015.06.26. Friday
+     * Set a ClickListener for Google Map
+     */
+    private GoogleMap.OnMapClickListener mMCListener = new GoogleMap.OnMapClickListener() {
+
+        @Override
+        public void onMapClick(LatLng latLng) {
+            showCurrentLocation(latLng);
+        }
+    };
+
     // GoogleMap.OnMyLocationChangeListener
     private GoogleMap.OnMyLocationChangeListener mMLCListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
@@ -442,17 +462,34 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
         return add;
     }
 
-    //+Show Current Location
+    /**
+     * Show Current Location
+     */
     private void showCurrentLocation() {
 
+        LatLng ll = new LatLng(getLatitude(), getLongitude());
+
+        showCurrentLocation(ll);
+    }
+
+    /**
+     * 2015.06.26. Friday
+     * Show Current Location
+     * @param ll LatLng object for adding Marker on the Map
+     */
+    private void showCurrentLocation(LatLng ll) {
         if (mMarker != null) {
             mMarker.remove();
         }
 
-        LatLng ll = new LatLng(getLatitude(), getLongitude());
+        if (mZoom == 0) {
+            mZoom = 15;
+        } else {
+            mZoom = googleMap.getCameraPosition().zoom;
+        }
 
-        // Move the camera instantly to current postion with a zoom of 15.
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ll, 15));
+        // Move the camera instantly to current postion
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ll, mZoom));
 
         // Marker
         mMarker = googleMap.addMarker(new MarkerOptions()
@@ -461,9 +498,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
                 .position(ll));
 
         // Zoom in, animating the camera.
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(mZoom), 2000, null);
     }
-    //-Show Current Location
 
     // Get Marker
     public Marker getMarker() {
