@@ -158,8 +158,12 @@
             android:id="@+id/tv_shortener"
             android:layout_width="@dimen/control_btn_width"
             android:layout_height="@dimen/control_btn_height"
+            android:gravity="center"
+            android:textSize="@dimen/ts_status_tv"
+            android:textColor="@color/banana_black"
+            android:singleLine="true"
             android:text="@string/empty"
-            android:background="@color/banana_white"/>
+            android:background="@drawable/four_status_gray"/>
 
     </LinearLayout>
 

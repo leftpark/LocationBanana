@@ -33,4 +33,10 @@
     <string name="network_disconnected">네트워크가 연결되지 않았습니다.</string>
     <!-- Refresh -->
     <string name="refresh">새로고침</string>
+
+    <!-- GpsStatus.Listener Event -->
+    <string name="gps_status_started">동작됨</string>
+    <string name="gps_status_stopped">멈춤</string>
+    <string name="gps_status_first_fix">우선연결</string>
+    <string name="gps_status_satellite">위성연결</string>
 </resources>

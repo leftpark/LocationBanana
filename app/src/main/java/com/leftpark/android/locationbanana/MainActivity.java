@@ -3,10 +3,12 @@ package com.leftpark.android.locationbanana;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -238,8 +240,22 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
 
             mTvAddress.setText(getAddress());
 
-            String tmp = Integer.toString(mLocationHelper.getGpsStatus());
-            mTvShortener.setText(tmp);
+            if (mLocationHelper != null) {
+                int gpsStatus = mLocationHelper.getGpsStatus();
+                if (gpsStatus == GpsStatus.GPS_EVENT_STOPPED) {
+                    mTvShortener.setText(R.string.gps_status_stopped);
+                    mTvShortener.setBackgroundResource(R.drawable.four_status_gray);
+                } else if (gpsStatus == GpsStatus.GPS_EVENT_STARTED) {
+                    mTvShortener.setText(R.string.gps_status_started);
+                    mTvShortener.setBackgroundResource(R.drawable.four_status_red);
+                } else if (gpsStatus == GpsStatus.GPS_EVENT_FIRST_FIX) {
+                    mTvShortener.setText(R.string.gps_status_first_fix);
+                    mTvShortener.setBackgroundResource(R.drawable.four_status_green);
+                } else if (gpsStatus == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
+                    mTvShortener.setText(R.string.gps_status_satellite);
+                    mTvShortener.setBackgroundResource(R.drawable.four_status_blue);
+                }
+            }
         }
     }
     //+Update Views

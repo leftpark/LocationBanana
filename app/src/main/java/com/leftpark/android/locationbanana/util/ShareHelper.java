@@ -74,7 +74,6 @@ public class ShareHelper {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "«… ∞Ì¡§");
         intent.putExtra(Intent.EXTRA_TEXT, getUrlGoogleMap());
 
         return intent;

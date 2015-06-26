@@ -46,4 +46,8 @@
     <dimen name="control_gab_width">10dp</dimen>
     <dimen name="control_gab_height">60dp</dimen>
     <!-- Control -->
+
+    <!-- Text Size -->
+    <dimen name="ts_btn">20sp</dimen>
+    <dimen name="ts_status_tv">20sp</dimen>
 </resources>

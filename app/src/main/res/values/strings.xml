@@ -33,4 +33,10 @@
     <string name="network_disconnected">Network disconnected.</string>
     <!-- Refresh -->
     <string name="refresh">Refresh</string>
+
+    <!-- GpsStatus.Listener Event -->
+    <string name="gps_status_started">Started</string>
+    <string name="gps_status_stopped">Stopped</string>
+    <string name="gps_status_first_fix">First Fix</string>
+    <string name="gps_status_satellite">Satellite</string>
 </resources>
