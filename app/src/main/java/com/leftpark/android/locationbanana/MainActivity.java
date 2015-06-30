@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,8 +71,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
     private TextView mTvCoordiateLatDMS;   // TextView for Latitude (DMS)
     private TextView mTvCoordiateLonDMS;   // TextView for Longitude (DMS)
     private TextView mTvAddress;    // TextView for Address
-    private Button mBtnShare;
-    private Button mBtnPosition;
+    //private Button mBtnShare;
+    private ImageButton mBtnShare;
+    //private Button mBtnPosition;
+    private ImageButton mBtnPosition;
     private Button mBtnShortener;   // Button for URL Shortener
     private TextView mTvShortener;  // TextView for URL Shortener
     private ImageView mIvCompass;   // Compass Needle
@@ -219,11 +222,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Sens
         mTvAddress = (TextView)findViewById(R.id.tv_address);
 
         // Initialize Shar Button
-        mBtnShare = (Button)findViewById(R.id.btn_share);
+        //mBtnShare = (Button)findViewById(R.id.btn_share);
+        mBtnShare = (ImageButton)findViewById(R.id.btn_share);
         mBtnShare.setOnClickListener(this);
 
         // Initialize Position Button
-        mBtnPosition = (Button)findViewById(R.id.btn_position);
+        //mBtnPosition = (Button)findViewById(R.id.btn_position);
+        mBtnPosition = (ImageButton)findViewById(R.id.btn_position);
         mBtnPosition.setOnClickListener(this);
 
         // Initialize Shortener Button

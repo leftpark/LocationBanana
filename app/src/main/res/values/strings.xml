@@ -16,11 +16,11 @@
     <!-- Coordinate : DD -->
     <string name="coordinate_latitude_init">Lat : -.----</string>
     <string name="coordinate_longitude_init">Lon : -.----</string>
-    <string name="coordinate_latitude">Lat : %1$.6f</string>
+    <string name="coordinate_latitude">Lat :  %1$.6f</string>
     <string name="coordinate_longitude">Lon : %1$.6f</string>
 
     <!-- Coordinate : DMS -->
-    <string name="coordinate_latitude_dms">(DMS) %1$s</string>
+    <string name="coordinate_latitude_dms">(DMS)  %1$s</string>
     <string name="coordinate_longitude_dms">(DMS) %1$s</string>
 
     <!-- Current Location -->

@@ -15,5 +15,7 @@
     <color name="banana_black">#FF000000</color>
     <!-- Banana White : FBF8ED -->
     <color name="banana_white">#FFFBF8ED</color>
+    <!-- Banana White : FBF8ED -->
+    <color name="banana_all_white">#FFFFFFFF</color>
 
 </resources>

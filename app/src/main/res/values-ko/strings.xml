@@ -16,11 +16,11 @@
     <!-- Coordinate -->
     <string name="coordinate_latitude_init">위도 : -.----</string>
     <string name="coordinate_longitude_init">경도 : -.----</string>
-    <string name="coordinate_latitude">위도 : %1$.6f</string>
+    <string name="coordinate_latitude">위도 : \s%1$.6f</string>
     <string name="coordinate_longitude">경도 : %1$.6f</string>
 
     <!-- Coordinate : DMS -->
-    <string name="coordinate_latitude_dms">(DMS) %1$s</string>
+    <string name="coordinate_latitude_dms">(DMS) \s%1$s</string>
     <string name="coordinate_longitude_dms">(DMS) %1$s</string>
 
     <!-- Current Location -->
@@ -30,7 +30,7 @@
     <string name="shortener">Shortener</string>
 
     <!-- Network Status -->
-    <string name="network_disconnected">네트워크가 연결되지 않았습니다.</string>
+    <string name="network_disconnected">네트워크에 연결되지 않았습니다.</string>
     <!-- Refresh -->
     <string name="refresh">새로고침</string>
 
